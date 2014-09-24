@@ -7,6 +7,7 @@ namespace PathFinderLibrary
     [CLSCompliant(true)]
     public class AStarIAFinder
     {
+
         /// <summary>
         /// La distance de base entre deux noeuds
         /// </summary>
