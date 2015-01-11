@@ -7,7 +7,7 @@ namespace PathFinderLibrary
     public class Node
     {
         private Vector2 position;
-        private bool notWalkable;
+        private bool isObstacle;
         private int uF, uG, uH;
         private Node nParent;
 
@@ -29,15 +29,15 @@ namespace PathFinderLibrary
         public Node(Vector2 position, bool obstacle)
         {
             this.position = position;
-            this.notWalkable = obstacle;
+            this.isObstacle = obstacle;
             this.parent = null;
         }
 
         // Obtenir ou modifier l'état "bloquant" du noeud
         public bool obstacle
         {
-            get { return this.notWalkable; }
-            set { this.notWalkable = value; }
+            get { return this.isObstacle; }
+            set { this.isObstacle = value; }
         }
 
         /// <summary>
@@ -86,15 +86,39 @@ namespace PathFinderLibrary
         }
 
         /// <summary>
-        /// La liste des noeuds voisins de l'instance actuelle
+        /// La liste des noeuds voisins adjacents de l'instance actuelle
         /// </summary>
         /// <param name="map">La carte de noeuds</param>
         /// <returns>Retourne la liste des noeuds voisins de distance 1 du noeud</returns>
-        public List<Node> Neighbors(Node[,] map)
+        public List<Node> GetAdjacentNeighbors(Node[,] map)
         {
             List<Node> neighbors = new List<Node>();
             Vector2[] coordinates = {new Vector2(1,0), new Vector2(-1, 0),
                                      new Vector2(0, 1), new Vector2(0, -1)};
+            foreach (Vector2 coordinate in coordinates)
+            {
+                Vector2 location = coordinate + this.position;
+                if (location.X >= 0 && location.Y >= 0 && location.X < map.GetLength(0) && location.Y < map.GetLength(1))
+                    if (!map[location.X, location.Y].obstacle)
+                        neighbors.Add(map[location.X, location.Y]);
+            }
+
+            return neighbors;
+        }
+
+        /// <summary>
+        /// La liste des noeuds voisins de l'instance actuelle
+        /// </summary>
+        /// <param name="map">La carte de noeuds</param>
+        /// <returns>Retourne la liste des noeuds voisins de distance 1 du noeud</returns>
+        public List<Node> GetNeighbors(Node[,] map)
+        {
+            List<Node> neighbors = new List<Node>();
+            Vector2[] coordinates = {new Vector2(1,0), new Vector2(-1, 0),
+                                     new Vector2(0, 1), new Vector2(0, -1),
+                                     new Vector2(-1, -1), new Vector2(1, -1),
+                                     new Vector2(-1, 1), new Vector2(1, 1)};
+
             foreach (Vector2 coordinate in coordinates)
             {
                 Vector2 location = coordinate + this.position;

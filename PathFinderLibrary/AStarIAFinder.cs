@@ -92,7 +92,7 @@ namespace PathFinderLibrary
                 openList.Remove(currentNode);
                 closedList.Add(currentNode);
 
-                List<Node> neighbours = currentNode.Neighbors(map);
+                List<Node> neighbours = currentNode.GetAdjacentNeighbors(map);
 
                 foreach (Node node in neighbours)
                 {
